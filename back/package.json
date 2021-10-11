@@ -1,0 +1,31 @@
+{
+    "name": "did_they_sell",
+    "version": "0.0.1",
+    "description": "API",
+    "main": "index.js",
+    "engines": {
+      "node": "16"
+    },
+    "scripts": {
+      "start": "node src/bin/www.js",
+      "dev": "node-dev src/bin/www.js",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git"
+    },
+    "keywords": [
+      "covalent"
+    ],
+    "author": "bguiz",
+    "license": "GPL-3.0",
+    "dependencies": {
+      "dotenv": "10.0.0",
+      "express": "4.17.1",
+      "morgan": "1.10.0",
+      "pg": "8.7.1"
+    },
+    "devDependencies": {
+      "node-dev": "7.0.0"
+    }
+  }
