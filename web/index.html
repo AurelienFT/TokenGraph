@@ -1,0 +1,30 @@
+<head>
+    <style> body { margin: 0; } </style>
+  
+    <script src="https://unpkg.com/3d-force-graph"></script>
+    <script src="https://unpkg.com/neo4j-driver"></script>
+  </head>
+  
+  <body>
+    <div id="3d-graph"></div>
+  
+    <script>
+      const start = new Date()
+      fetch('http://localhost:3000/v1/get_graph/0xd417144312dbf50465b1c641d016962017ef6240')
+        .then(response => response.json())
+        .then(function (result) {
+          console.log(result)
+          const links = result.map(r => { console.log(r); return {source: r['from_address'], target: r['to_address']}});        
+          console.log(links);
+          console.log(links.length+" links loaded in "+(new Date()-start)+" ms.")
+          const ids = new Set()
+          links.forEach(l => {ids.add(l.source);ids.add(l.target);});
+          const gData = { nodes: Array.from(ids).map(id => {return {id}}), links: links}
+          console.log(gData);
+          const Graph = ForceGraph3D()(document.getElementById('3d-graph')).graphData(gData);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    </script>
+  </body>
