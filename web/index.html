@@ -1,30 +1,64 @@
 <head>
-    <style> body { margin: 0; } </style>
+  <style> body { margin: 0; } </style>
   
-    <script src="https://unpkg.com/3d-force-graph"></script>
-    <script src="https://unpkg.com/neo4j-driver"></script>
-  </head>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+  <script src="https://unpkg.com/neo4j-driver"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div id="graph"></div>
+  <div id="labels">
+    <div>
+      <div>
+        Depth (more you put more it will be laggy)
+      </div>
+      <div>
+        <button onclick="changeDepth('+')" style="display: inline-block;">+</button>
+        <div style="display: inline-block;" id="depth">1</div>
+        <button onclick="changeDepth('-')" style="display: inline-block;">-</button>
+      </div>
+      <div>
+        <form action="javascript:changeBaseAddress(baseAddressForm.value);">
+        <input style="display: inline-block;" type="text" id="baseAddressForm" name="baseAddressForm" placeholder="Type an address...">
+        <input type="submit" style="display: inline-block;" value="Submit">
+      </form>
+      </div>
+    </div>
+  </div>
   
-  <body>
-    <div id="3d-graph"></div>
-  
-    <script>
-      const start = new Date()
-      fetch('http://localhost:3000/v1/get_graph/0xd417144312dbf50465b1c641d016962017ef6240')
-        .then(response => response.json())
-        .then(function (result) {
-          console.log(result)
-          const links = result.map(r => { console.log(r); return {source: r['from_address'], target: r['to_address']}});        
-          console.log(links);
-          console.log(links.length+" links loaded in "+(new Date()-start)+" ms.")
+  <script>
+    const start = new Date()
+    var depth = 1;
+    var baseAddress = "0x0000000000000000000000000000000000000000";
+    function changeDepth(e) {
+      if (e == "+") {
+        depth++;
+      } else if (e == "-" && depth > 1) {
+        depth--;
+      }
+      document.getElementById("depth").innerText = depth;
+      reloadGraph();
+    }
+    function changeBaseAddress(e) {
+      console.log(e);
+      baseAddress = e;
+      reloadGraph();
+    }
+    function reloadGraph() {
+      fetch(`http://localhost:3000/v1/get_graph/0xd417144312dbf50465b1c641d016962017ef6240/${baseAddress}/${depth}`)
+      .then(response => response.json())
+      .then(function (links) {
           const ids = new Set()
           links.forEach(l => {ids.add(l.source);ids.add(l.target);});
           const gData = { nodes: Array.from(ids).map(id => {return {id}}), links: links}
           console.log(gData);
-          const Graph = ForceGraph3D()(document.getElementById('3d-graph')).graphData(gData);
+          const Graph = ForceGraph3D()(document.getElementById('graph')).graphData(gData);
         })
         .catch(function (error) {
           console.log(error);
         });
+      }
+      reloadGraph();
     </script>
   </body>

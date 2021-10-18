@@ -1,0 +1,15 @@
+#graph {
+    position: relative;  /* makes this the origin of its children */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: black;
+}
+
+#labels {
+    position: absolute;  /* let us position ourself inside the container */
+    left: 0;             /* make our position the top left of the container */
+    top: 0;
+    color: white;
+    background-color: black;
+}

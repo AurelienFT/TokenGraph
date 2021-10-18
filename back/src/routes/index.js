@@ -4,7 +4,7 @@ const dbPool = require('../db-pool.js');
 
 const router = express.Router();
 
-router.get('/get_graph/:address', function(req, res) {
+router.get('/get_graph/:address/:baseAddress/:depth', function(req, res) {
     let address = req.params.address;
     if(!address || address.length != 42 || address[0] != '0' || address[1] != 'x') {
         res.status(400).send('Invalid address');
@@ -29,9 +29,27 @@ router.get('/get_graph/:address', function(req, res) {
       if (error) {
         throw error;
       }
+      let matchAddresses = [req.params.baseAddress];
+      let retArray = [];
+      for (i = 0; i < req.params.depth; i++) {
+        let nextMatchAddresses = [];
+        retArray = retArray.concat(results.rows.reduce(
+        function(links, r) {
+          for(j = 0; j < matchAddresses.length; j++) {
+            if (matchAddresses.includes(r['from_address'])) {
+              links.push({source: r['from_address'], target: r['to_address']});
+              nextMatchAddresses.push(r['to_address']);
+            }
+          }
+          return links;
+        },
+        []
+        ));
+        matchAddresses = nextMatchAddresses;
+      }
       res.status(200).setHeader("Access-Control-Allow-Headers", "Content-Type").setHeader(
         "Access-Control-Allow-Origin", "*").setHeader(
-        "Access-Control-Allow-Methods", "OPTIONS,POST,GET").json(results.rows);
+        "Access-Control-Allow-Methods", "OPTIONS,POST,GET").json(retArray);
     });
   });
 
