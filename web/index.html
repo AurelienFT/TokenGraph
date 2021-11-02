@@ -1,6 +1,10 @@
 <head>
-  <style> body { margin: 0; } </style>
-  
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+
   <script src="https://unpkg.com/3d-force-graph"></script>
   <script src="https://unpkg.com/neo4j-driver"></script>
   <link rel="stylesheet" href="index.css">
@@ -12,37 +16,52 @@
     <div id="graph">
     </div>
     <div id="labels">
-    <div>
       <div>
-        Depth (more you put more it will be laggy)
+        <div>
+          Depth (more you put more it will be laggy)
+        </div>
+        <div>
+          <button onclick="changeDepth('+')" style="display: inline-block;">+</button>
+          <div style="display: inline-block;" id="depth">1</div>
+          <button onclick="changeDepth('-')" style="display: inline-block;">-</button>
+        </div>
+        <div>
+          <div>
+            Change contract address :
+          </div>
+          <form action="javascript:changeContractAddress(contractAddressForm.value);">
+            <input style="display: inline-block;" type="text" id="contractAddressForm" name="contractAddressForm"
+              placeholder="0xd417144312dbf50465b1c641d016962017ef6240">
+            <input type="submit" style="display: inline-block;" value="Submit">
+          </form>
+        </div>
+        <div>
+          <div>
+            Change base address :
+          </div>
+          <form action="javascript:changeBaseAddress(baseAddressForm.value);">
+            <input style="display: inline-block;" type="text" id="baseAddressForm" name="baseAddressForm"
+              placeholder="0x0000000000000000000000000000000000000000">
+            <input type="submit" style="display: inline-block;" value="Submit">
+          </form>
+        </div>
       </div>
-      <div>
-        <button onclick="changeDepth('+')" style="display: inline-block;">+</button>
-        <div style="display: inline-block;" id="depth">1</div>
-        <button onclick="changeDepth('-')" style="display: inline-block;">-</button>
+    </div>
+    <div id="logo">
+      <div id="text-logo">
+        Data powered by
       </div>
-      <div>
-        <form action="javascript:changeBaseAddress(baseAddressForm.value);">
-        <input style="display: inline-block;" type="text" id="baseAddressForm" name="baseAddressForm" placeholder="Type an address...">
-        <input type="submit" style="display: inline-block;" value="Submit">
-      </form>
+      <img src="logo.png" width="300" alt="logo">
+      <div id="text-logo">
+        Code source <a target="_blank" href="https://github.com/AurelienFT/DidTheySell"> here </a>
       </div>
     </div>
   </div>
-  <div id="logo">
-    <div id="text-logo">
-      Data powered by
-    </div>
-    <img src="logo.png" width="300" alt="logo">
-    <div id="text-logo">
-      Code source <a target="_blank" href="https://github.com/AurelienFT/DidTheySell"> here </a>
-    </div>
-  </div>
-  </div>
-  
+
   <script>
     const start = new Date()
     var depth = 1;
+    var contractAddress = "0xd417144312dbf50465b1c641d016962017ef6240";
     var baseAddress = "0x0000000000000000000000000000000000000000";
     function changeDepth(e) {
       if (e == "+") {
@@ -54,27 +73,29 @@
       reloadGraph();
     }
     function changeBaseAddress(e) {
-      console.log(e);
       baseAddress = e;
+      reloadGraph();
+    }
+    function changeContractAddress(e) {
+      contractAddress = e;
       reloadGraph();
     }
     function reloadGraph() {
       document.getElementById("graph").innerHTML = "";
       document.getElementById("graph").id = "loader";
-      fetch(`http://localhost:3000/v1/get_graph/0xd417144312dbf50465b1c641d016962017ef6240/${baseAddress}/${depth}`)
-      .then(response => response.json())
-      .then(function (links) {
+      fetch(`http://localhost:3000/v1/get_graph/${contractAddress}/${baseAddress}/${depth}`)
+        .then(response => response.json())
+        .then(function (links) {
           const ids = new Set()
-          links.forEach(l => {ids.add(l.source);ids.add(l.target);});
-          const gData = { nodes: Array.from(ids).map(id => {return {id}}), links: links}
-          console.log(gData);
+          links.forEach(l => { ids.add(l.source); ids.add(l.target); });
+          const gData = { nodes: Array.from(ids).map(id => { return { id } }), links: links }
           document.getElementById("loader").id = "graph";
           const Graph = ForceGraph3D()(document.getElementById('graph')).graphData(gData);
         })
         .catch(function (error) {
           console.log(error);
         });
-      }
-      reloadGraph();
-    </script>
-  </body>
+    }
+    reloadGraph();
+  </script>
+</body>
