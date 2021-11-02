@@ -90,7 +90,7 @@
           links.forEach(l => { ids.add(l.source); ids.add(l.target); });
           const gData = { nodes: Array.from(ids).map(id => { return { id } }), links: links }
           document.getElementById("loader").id = "graph";
-          const Graph = ForceGraph3D()(document.getElementById('graph')).graphData(gData);
+          const Graph = ForceGraph3D()(document.getElementById('graph')).graphData(gData).nodeLabel(({ id }) => `<span>Address: ${id}</span>`);
         })
         .catch(function (error) {
           console.log(error);
