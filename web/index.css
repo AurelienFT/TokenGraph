@@ -1,15 +1,50 @@
 #graph {
-    position: relative;  /* makes this the origin of its children */
     width: 100%;
     height: 100%;
     overflow: hidden;
     background-color: black;
 }
 
+#loader {
+    margin: auto;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
 #labels {
     position: absolute;  /* let us position ourself inside the container */
     left: 0;             /* make our position the top left of the container */
     top: 0;
     color: white;
+    background-color: grey;
+    padding: 15px;
+    line-height: 30px;
+    border-radius: 30px;
+}
+
+#logo {
+    position: absolute;  /* let us position ourself inside the container */
+    bottom: 0;
+    right: 0;
+}
+
+#text-logo {
+    color: white;
+    text-align: center;
+}
+
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
     background-color: black;
 }
