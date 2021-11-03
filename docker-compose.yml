@@ -1,0 +1,14 @@
+version: '3'
+services:
+  olta_back:
+    container_name: olta_back
+    ports:
+      - "3000:3000"
+    build:
+      context: ./
+    environment:
+      DATABASE_URL: $DATABASE_URL
+      DB_USERNAME: $DB_USERNAME 
+      DB_PASSWORD: $DB_PASSWORD 
+      DB_NAME: $DB_NAME 
+      DB_HOST: $DB_HOST
