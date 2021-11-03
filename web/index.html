@@ -8,7 +8,6 @@
   <script src="https://unpkg.com/3d-force-graph"></script>
   <script src="https://unpkg.com/neo4j-driver"></script>
   <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="loader.css">
 </head>
 
 <body>
@@ -83,7 +82,7 @@
     function reloadGraph() {
       document.getElementById("graph").innerHTML = "";
       document.getElementById("graph").id = "loader";
-      fetch(`http://localhost:3000/v1/get_graph/${contractAddress}/${baseAddress}/${depth}`)
+      fetch(`http://51.77.221.132:3000/v1/get_graph/${contractAddress}/${baseAddress}/${depth}`)
         .then(response => response.json())
         .then(function (links) {
           const ids = new Set()
