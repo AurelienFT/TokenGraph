@@ -82,7 +82,7 @@
     function reloadGraph() {
       document.getElementById("graph").innerHTML = "";
       document.getElementById("graph").id = "loader";
-      fetch(`http://51.77.221.132:3000/v1/get_graph/${contractAddress}/${baseAddress}/${depth}`)
+      fetch(`https://olta.fr:3000/v1/get_graph/${contractAddress}/${baseAddress}/${depth}`)
         .then(response => response.json())
         .then(function (links) {
           const ids = new Set()
