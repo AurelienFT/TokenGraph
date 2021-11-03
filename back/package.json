@@ -7,8 +7,8 @@
       "node": "16"
     },
     "scripts": {
-      "start": "node src/bin/www.js",
-      "dev": "node-dev src/bin/www.js",
+      "start": "NODE_ENV=production node src/bin/www.js",
+      "dev": "NODE_ENV=dev node-dev src/bin/www.js",
       "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

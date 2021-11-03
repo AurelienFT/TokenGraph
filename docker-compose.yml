@@ -12,6 +12,9 @@ services:
       DB_PASSWORD: $DB_PASSWORD 
       DB_NAME: $DB_NAME 
       DB_HOST: $DB_HOST
+    volumes:
+      - /docker-volumes/etc/letsencrypt/live/olta.fr/fullchain.pem:/etc/letsencrypt/live/olta.fr/fullchain.pem
+      - /docker-volumes/etc/letsencrypt/live/olta.fr/privkey.pem:/etc/letsencrypt/live/olta.fr/privkey.pem
   nginx-container:
     container_name: 'nginx-container'
     image: nginx:latest
